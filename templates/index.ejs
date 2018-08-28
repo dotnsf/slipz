@@ -84,8 +84,8 @@ if( user != null ){
 });
 
 function loadSlidePuzzle( user_screen_name ){
-  var puzzle = '<img width="400" height="400" src="/profileimage?screen_name=' + user_screen_name + '" class="jqPuzzle"/>'
-    + '<p>このページの作成には "jqPuzzle" を利用しています : <a target="_blank" href="//www.2meter3.de/jqPuzzle/"><b>jqPuzzle</b></a></p>';
+  var puzzle = '<img width="400" height="400" src="/profileimage?screen_name=' + user_screen_name + '" class="jqPuzzle mx-auto"/>'
+    + '<br/><br/><div style="text-align:right;">このページの作成には "jqPuzzle" を利用しています</div>';
   $('#puzzle').append( puzzle );
 
   var t = $('img.jqPuzzle');
@@ -142,37 +142,6 @@ body{
   width: 90%;
   background-color: #5aa;
   color: #fff;
-}
-.doc{
-  width: 100%;
-  background-color: #eef;
-}
-.doc-header{
-  font-size: 20px;
-  background-color: #338;
-  color: #ccc;
-  width: 100%;
-}
-.doc-header-span{
-  float: right;
-}
-.doc-header-btn{
-  height: 30px;
-}
-.doc-body{
-  font-size: 20px;
-  background-color: #eef;
-  color: #003;
-  width: 100%;
-}
-.doc-text{
-  font-size: 20px;
-  color: #008;
-}
-.doc-category{
-  font-size: 20px;
-  color: #088;
-  cursor: pointer;
 }
 a.nounderline{
   text-decoration: none;

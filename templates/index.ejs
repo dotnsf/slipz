@@ -1,0 +1,197 @@
+<%- include('./header', {}) %>
+<link rel="stylesheet" type="text/css" href="/css/jquery.jqpuzzle.css"/>
+<script type="text/javascript" src="/js/jquery.jqpuzzle.packed.js"></script>
+
+<title><%= ogp.title %></title>
+
+<!-- //OGP -->
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="<%= ogp.title %>"/>
+<meta property="og:site_name" content="<%= ogp.title %>"/>
+<meta property="og:url" content="<%= ogp.url %>"/>
+<meta property="og:image" content="<%= ogp.image_url %>"/>
+<meta property="og:description" content="<%= ogp.desc %>"/>
+<!-- OGP// -->
+
+<script>
+var settings = {
+  rows: 4,
+  cols: 4,
+  hole: 16,
+  shuffle: true,
+  numbers: true,
+  language: 'ja',
+  control: {
+    shufflePieces: false,
+    confirmShuffle: true,
+    toggleOriginal: true,
+    toggleNumbers: true,
+    counter: true,
+    timer: false,
+    pauseTimer: true
+  },
+  success: {
+    fadeOriginal: false,
+    callback: undefined,
+    callbackTimeout: 300
+  },
+  animation: {
+    shuffleRounds: 3,
+    shuffleSpeed: 800,
+    slidingSpeed: 200,
+    fadeOriginalSpeed: 600
+  },
+  style: {
+    gridSize: 2,
+    overlap: true,
+    backgroundOpacity: 0.1
+  }
+};
+var texts = {
+  shuffleLabel: 'シャッフル',
+  toggleOriginalLabel: '元画像',
+  toggleNumbersLabel: '数値表示／非表示',
+  confirmShuffleMessage: 'シャッフルしてよろしいですか？',
+  movesLabel: '回',
+  secondsLabel: '秒'
+};
+
+$(function(){
+  //. Share Icons
+  var enc_title = encodeURIComponent( '<%= ogp.title %>' );
+  var enc_url = encodeURIComponent( '<%= ogp.url %>' );
+  //$('#navbar').append( '<li class="nav-item"><a href="http://twitter.com/share?url=' + enc_url + '&text=' + enc_title + '" target="_blank"><img src="/images/tw.png"/></a></li>' );
+  //$('#navbar').append( '<li class="nav-item"><a href="http://www.facebook.com/sharer.php?u=' + enc_url + '&amp;t=' + enc_title + '" target="_blank" rel="nofollow"><img src="/images/fb.png"/></a></li>' );
+
+<%
+if( user != null ){
+%>
+  //. ログインしている
+  var dropdown = '<div class="dropdown"><button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span><!-- <img width="20" height="20" src="https://twitter.com/<%= user.screen_name %>/profile_image?size=normal"/>--> <%= user.screen_name %></button>'
+    + '<div class="dropdown-menu"><a class="dropdown-item" class="nav-link" href="#" title="logout" onClick="logout()">Logout</a></div>'
+    + '</div>';
+  $('#navbar').append( '<li class="nav-item">' + dropdown + '</li>' );
+
+  loadSlidePuzzle( "<%= user.screen_name %>" );
+<%
+}else{
+%>
+  //. ログインしていない
+  $('#navbar').append( '<li class="nav-item"><a class="nav-link" href="#" onClick="login()"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>' );
+<%
+}
+%>
+});
+
+function loadSlidePuzzle( user_screen_name ){
+  var puzzle = '<img width="400" height="400" src="/profileimage?screen_name=' + user_screen_name + '" class="jqPuzzle"/>'
+    + '<p>このページの作成には "jqPuzzle" を利用しています : <a target="_blank" href="//www.2meter3.de/jqPuzzle/"><b>jqPuzzle</b></a></p>';
+  $('#puzzle').append( puzzle );
+
+  var t = $('img.jqPuzzle');
+  t.jqPuzzle( settings, texts );
+}
+
+function logout(){
+  if( window.confirm( 'Logout?' ) ){
+    var obj = getBusyOverlay( 'viewport', {color:'black', opacity:0.5, text:'loading', style:'text-decoration:blink; font-weight:bold; font-size:12px; color:white;' } );
+    $.ajax({
+      type: 'POST',
+      url: '/logout',
+      data: {},
+      success: function( data ){
+        obj.remove();
+        window.location.href = '/';
+      },
+      error: function(){
+        obj.remove();
+        window.location.href = '/';
+      }
+    });
+  }
+}
+
+function login(){
+  //window.location.href = '/login';
+  window.location.href = '/twitter';
+}
+
+function timestamp2datetime( ts ){
+  var dt = new Date( ts );
+  var yyyy = dt.getFullYear();
+  var mm = dt.getMonth() + 1;
+  var dd = dt.getDate();
+  var hh = dt.getHours();
+  var nn = dt.getMinutes();
+  var ss = dt.getSeconds();
+  var datetime = yyyy + '-' + ( mm < 10 ? '0' : '' ) + mm + '-' + ( dd < 10 ? '0' : '' ) + dd
+    + ' ' + ( hh < 10 ? '0' : '' ) + hh + ':' + ( nn < 10 ? '0' : '' ) + nn + ':' + ( ss < 10 ? '0' : '' ) + ss;
+  return datetime;
+}
+</script>
+<style>
+body{
+  background-color: #ddf;
+}
+.index-header{
+  background-color: #cce;
+  color: #333;
+}
+.jumbotron{
+  margin: auto;
+  width: 90%;
+  background-color: #5aa;
+  color: #fff;
+}
+.doc{
+  width: 100%;
+  background-color: #eef;
+}
+.doc-header{
+  font-size: 20px;
+  background-color: #338;
+  color: #ccc;
+  width: 100%;
+}
+.doc-header-span{
+  float: right;
+}
+.doc-header-btn{
+  height: 30px;
+}
+.doc-body{
+  font-size: 20px;
+  background-color: #eef;
+  color: #003;
+  width: 100%;
+}
+.doc-text{
+  font-size: 20px;
+  color: #008;
+}
+.doc-category{
+  font-size: 20px;
+  color: #088;
+  cursor: pointer;
+}
+a.nounderline{
+  text-decoration: none;
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light index-header">
+  <a href="/" class="navbar-brand"><%= ogp.title %></a>
+  <div class="collapse navbar-collapse target">
+    <ul class="navbar-nav mr-auto">
+    </ul>
+    <ul class="navbar-nav" id="navbar">
+    </ul>
+  </div>
+</nav>
+
+<div class="container" id="puzzle" style="padding:20px 0; font-size:8px;">
+</div>
+
+<%- include('./footer', {}) %>

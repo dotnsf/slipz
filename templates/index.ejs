@@ -27,7 +27,7 @@ var settings = {
     toggleOriginal: true,
     toggleNumbers: true,
     counter: true,
-    timer: false,
+    timer: true,
     pauseTimer: true
   },
   success: {
@@ -152,7 +152,8 @@ a.nounderline{
 
 <nav class="navbar navbar-expand-lg navbar-light index-header">
   <a href="/" class="navbar-brand"><%= ogp.title %></a>
-  <div class="collapse navbar-collapse target">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"></button>
+  <div id="navbarNav" class="collapse navbar-collapse">
     <ul class="navbar-nav mr-auto">
     </ul>
     <ul class="navbar-nav" id="navbar">
